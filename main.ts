@@ -15,4 +15,11 @@ const text =
 
 const outDir = process.env.MAKEFUN_OUTPUT_DIR ?? "/output";
 mkdirSync(outDir, { recursive: true });
+
+// The gate counts Unicode code points, newlines included: fail loudly
+// rather than writing an entry the gate would refuse.
+const length = [...text].length;
+if (length < 1 || length > 280 || text.trim().length === 0) {
+  throw new Error(`entry.txt must be 1-280 code points, got ${length}`);
+}
 writeFileSync(join(outDir, "entry.txt"), text, "utf8");
